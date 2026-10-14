@@ -8,9 +8,8 @@ Usage:
 
 Videos already in the manifest are skipped (--force to redo); failures go to failed.txt.
 
-Detects the spoken language, writes captions in that language plus an English
-translation (skipped when the video is already English), and registers the video
-in captions/manifest.js so index.html picks it up.
+Detects the spoken language, writes captions in that language, and registers the
+video in captions/manifest.js so index.html picks it up.
 """
 import argparse
 import hashlib
@@ -112,14 +111,6 @@ def caption_one(model, model_name, source, name):
         "src": f"captions/{name}.{lang}.vtt",
         "cues": write_vtt(segments, OUT / f"{name}.{lang}.vtt"),
     }]
-
-    if lang != "en":
-        segments, _ = model.transcribe(audio, task="translate", language=lang, **opts)
-        tracks.append({
-            "lang": "en", "label": "English (translated)", "kind": "subtitles",
-            "src": f"captions/{name}.en.vtt",
-            "cues": write_vtt(segments, OUT / f"{name}.en.vtt"),
-        })
 
     # Page lives next to this script, so local paths are made relative to it
     video_src = source if is_url else os.path.relpath(Path(source).resolve(), ROOT.resolve())

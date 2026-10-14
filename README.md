@@ -1,13 +1,8 @@
 # Turkish Video Transpiler
 
-Automatic captions and English translations for videos, using [Whisper](https://github.com/openai/whisper) running locally through [faster-whisper](https://github.com/SYSTRAN/faster-whisper). Built for Turkish lessons, but the spoken language is detected automatically, so it works for any language Whisper supports.
+Automatic captions for videos, using [Whisper](https://github.com/openai/whisper) running locally through [faster-whisper](https://github.com/SYSTRAN/faster-whisper). Built for Turkish lessons, but the spoken language is detected automatically, so it works for any language Whisper supports.
 
-For every video it produces:
-
-- **Captions in the spoken language** (e.g. `lesson.tr.vtt`)
-- **An English translation** (`lesson.en.vtt`). Skipped when the video is already in English.
-
-Both are standard [WebVTT](https://developer.mozilla.org/en-US/docs/Web/API/WebVTT_API) files, so they work with any HTML5 player, Mux, Vimeo, and most video platforms. A viewer page (`index.html`) shows each video with both caption tracks and a clickable transcript.
+For every video it produces **captions in the spoken language** (e.g. `lesson.tr.vtt`) as a standard [WebVTT](https://developer.mozilla.org/en-US/docs/Web/API/WebVTT_API) file, which works with any HTML5 player, Mux, Vimeo, and most video platforms. A viewer page (`index.html`) shows each video with its captions and a clickable transcript.
 
 Everything runs on your machine: no API keys, no per-minute costs, and videos are never uploaded anywhere.
 
@@ -55,7 +50,6 @@ Then open `index.html` in your browser to watch the results. It works straight f
 ```
 captions/
   lesson-01.tr.vtt     # captions in the detected language
-  lesson-01.en.vtt     # English translation
   manifest.js          # index of captioned videos, read by index.html
 ```
 
@@ -64,7 +58,6 @@ To use the captions in your own player:
 ```html
 <video src="https://example.com/lesson-01.mp4" controls>
   <track kind="captions" src="captions/lesson-01.tr.vtt" srclang="tr" label="Türkçe" default>
-  <track kind="subtitles" src="captions/lesson-01.en.vtt" srclang="en" label="English">
 </video>
 ```
 
@@ -88,10 +81,9 @@ To use the captions in your own player:
 
 ## Performance
 
-On a typical laptop CPU with `large-v3`, processing takes roughly **2–3× the video's length** (about 4 minutes for a 1m45s video), covering both the captions and the translation. Use `--model small` for roughly 10× faster runs at lower accuracy. An NVIDIA GPU is much faster; change `device="cpu"` to `device="cuda"` in `caption.py`.
+On a typical laptop CPU with `large-v3`, processing takes roughly **1–1.5× the video's length** (about 2 minutes for a 1m45s video). Use `--model small` for roughly 10× faster runs at lower accuracy. An NVIDIA GPU is much faster; change `device="cpu"` to `device="cuda"` in `caption.py`.
 
 ## Limitations
 
-- **Translation is English only.** That's a limit of Whisper itself. Other target languages need a separate translation step.
 - **The language is detected from the first 30 seconds.** A video that switches language partway through is captioned as its opening language.
 - **Accuracy drops** with background music, heavy noise, or overlapping speakers. Technical terms may occasionally be misheard.

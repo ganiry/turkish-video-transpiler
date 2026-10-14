@@ -131,7 +131,7 @@ function load(entry) {
     render();
   });
 
-  // Transcript: source-language cues, each with the overlapping translation underneath
+  // Transcript: first track's cues, with any extra track's overlapping cue underneath
   const tr = entry.tracks[1];
   $("count").textContent = `${src.cues.length} cues`;
   $("cues").innerHTML = src.cues.map((c, i) => {

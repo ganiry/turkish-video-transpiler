@@ -1,0 +1,13 @@
+# Generated output (your captions stay local)
+captions/
+failed.txt
+
+# Videos
+*.mp4
+*.mov
+*.mkv
+*.webm
+
+# Python
+.venv/
+__pycache__/
